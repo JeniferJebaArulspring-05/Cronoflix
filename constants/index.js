@@ -1,12 +1,12 @@
  export const movieBox=[
     {
         id:1,
-        name:"Movies",
+        name:"All",
         title:"most-popular-movies"
     },
     {
         id:2,
-        name:"Tv Shows",
+        name:"Popularity",
         title:"most-popular-tv"
 
     },
@@ -24,25 +24,5 @@
         id:5,
         name:"Top shows",
         title:"top250-tv"
-    }
-]
-
-export const native=[
-    {
-        id:1,
-        name:"Tamil"
-    },
-    {
-        id:2,
-        name:"Malayalam"
-    }
-    ,
-    {
-        id:3,
-        name:"Kanadam"
-    },
-    {
-        id:4,
-        name:"Telugu"
     }
 ]

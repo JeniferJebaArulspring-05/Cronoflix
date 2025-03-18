@@ -1,104 +1,63 @@
-'use client';
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getMovieDetails } from "@/lib/movieService";
+import Image from "next/image";
+import Link from "next/link";
 
-import Header from '@/components/Header';
-import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Image from 'next/image';
 
-const Page = () => {
-  const [data, setData] = useState();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { id } = useParams(); // Get ID from URL params
+export default function MovieDetails() {
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const fetchMovieData = async () => {
-      if (!id) return; // Avoid unnecessary API calls if ID is not available
-
-      setLoading(true);
-      setError(null);
-
+    const fetchMovie = async () => {
       try {
-        const response = await axios.get(
-          `https://imdb236.p.rapidapi.com/imdb/${id}`,
-          {
-            headers: {
-              "x-rapidapi-key": "c1b4e57747msh5e6b54b382d31e5p1740cdjsn7177b2c8a432",
-              "x-rapidapi-host": "imdb236.p.rapidapi.com",
-            },
-          }
-        );
-
-        console.log("API Response:", response.data);
-        setData(response.data.results || response.data);
+        const data = await getMovieDetails(id);
+        setMovie(data);
+        console.log(data)
       } catch (error) {
-        console.error("API Error:", error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching movie details:", error);
       }
     };
 
-    fetchMovieData();
-  }, [id]); // Use ID as the dependency
+    if (id) fetchMovie();
+  }, [id]);
+
+  if (!movie) return <p>Loading...</p>;
 
   return (
-    <>
-      <Header />
-      <div className="lg:p-10 p-5  text-white ">
-        {loading && <p>Loading...</p>}
-        {error && <p className="text-red-500">Error: {error}</p>}
-        <div className=' flex lg:flex-row flex-col  gap-5 p-5 justify-center items-center'>
-            <div className='flex  bg-red-400 justify-center w-[50%] items-center'>
-                <Image
-                src={data?.primaryImage}
-                width={200}
-                height={200}
-                alt={data?.title}
-                className='w-full h-full'
-                quality={100}
-                />
-            </div>
+    <div className="w-full  p-6">
+      <div className="flex flex-col lg:flex-row gap-3 mx-auto">
+        <Image
+        src={movie.banner}
+        
+        alt="image"
+        width={350}
+        height={350}/>
 
-            {/* detals */}
-            <div className='flex flex-col gap-4 lg:gap-10 p-5   '>
-                <h1 className='text-center text-3xl lg:text-7xl font-semibold'>{data?.primaryTitle}<span className='text-xs'></span></h1>
-               
-                <p className='lg:text-3xl'>Rating: <span className='text-red-600'>{data?.averageRating}</span></p>
-                
-                
-                <div className='flex justify-between items-center'>
-                    <p className='lg:text-3xl'>Votes: {data?.numVotes}</p>
-                    <p className='lg:text-3xl'>Duration: {data?.runtimeMinutes}min</p>
+        <div className="flex flex-col gap-4 p-6 items-center justify-center">
+          <h1 className="text-3xl font-semibold text-center lg:text-7xl">{movie.title}</h1>
+          <div className="flex gap-2 lg:gap-5">
+          <p className="mt-2 lg:text-4xl"><strong>Release Year:</strong> {movie.year}</p>
+          <p className="mt-2 lg:text-4xl"><strong>Rating:</strong> {movie.rating}</p>
+          </div>
+          <Link href={movie.trailer} className="bg-red-500 outline-none border-none  w-full lg:w-[80%] p-4 rounded-md text-center">Watch Trailer</Link>
+          <p className="mt-2 text-gray-600 lg:text-2xl">{movie.description}</p>
 
-                </div>
-                <p className='lg:text-3xl'>
-                    Description : {data?.description}
-                </p>
-                
-                <div className='flex flex-wrap lg:gap-10 gap-2'>
-                    {
-                        data?.genres?.map((name,index)=>(
-                            <div key={index} className='p-2 bg-red-500 text-white rounded-md'>{name}</div>
-                        ))
-                    }
-
-                </div>
-
-            </div>
-            
-
-
-            
 
         </div>
 
-        {/* end */}
-    
       </div>
-    </>
+      
+    </div>
   );
-};
+}
 
-export default Page;
+{/* <img src={movie.poster} alt={movie.name} className="w-full rounded-lg shadow-lg" />
+      <h1 className="text-3xl font-bold mt-4">{movie.name}</h1>
+      
+      <p className="mt-2"><strong>Genre:</strong> {movie.genre}</p>
+      <p className="mt-2"><strong>Release Year:</strong> {movie.year}</p>
+      <p className="mt-2"><strong>Rating:</strong> {movie.rating}</p>
+      <Image src={movie.banner} alt="image" width={350} height={350}/> */}

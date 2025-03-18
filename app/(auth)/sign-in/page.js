@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -104,33 +103,3 @@ export default function Login() {
   );
 }
 
-{
-  /* <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleLogin} className="flex flex-col space-y-3">
-        <input
-          type="email"
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-          className="p-2 border rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-          className="p-2 border rounded"
-        />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Login
-        </button>
-      </form>
-      <p className="mt-2">
-        Don't have an account?{" "}
-        <a href="/sign-up" className="text-blue-500 underline">
-          Sign Up
-        </a>
-      </p>
-      
-    </div> */
-}
